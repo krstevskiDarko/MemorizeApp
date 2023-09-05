@@ -1,6 +1,4 @@
-# Memorize SwiftUI App
-
-![SwiftUI Logo](https://developer.apple.com/assets/elements/icons/swiftui/swiftui-256x256_2x.png)
+# Memorize SwiftUI App <img src="https://developer.apple.com/assets/elements/icons/swiftui/swiftui-256x256_2x.png" width="100" height="100">
 
 This repository contains the code for the "Memorize" SwiftUI app, a simple card-matching game. The objective of the game is to match pairs of cards to score points.
 
