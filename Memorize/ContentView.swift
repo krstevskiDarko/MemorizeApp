@@ -10,41 +10,35 @@ import SwiftUI
 
 
 struct ContentView: View {
-    
     var body: some View {
-        
         HStack{
             CardView(isFaceUp: true)
-            CardView()
+            CardView(isFaceUp: true)
             CardView()
             CardView()
         }
         .foregroundColor(.blue)
         .padding()
-        
-        
     }
-    
 }
 
 struct CardView: View{
-    var isFaceUp: Bool = false
-    
+    @State var isFaceUp = false   //@State for animations, dont use it for the Game Logic, pointer to value of isFaceUp
     
     var body: some View{
         ZStack {
+            let shape = RoundedRectangle(cornerRadius: 12)
             if isFaceUp{
-                RoundedRectangle(cornerRadius: 12)
-                    .foregroundColor(.white)
-                RoundedRectangle(cornerRadius: 12)
-                    .strokeBorder(style:StrokeStyle(lineWidth: 5))
+                shape.fill(.white)
+                shape.strokeBorder(style:StrokeStyle(lineWidth: 5))
                 Text("🥶").font(.largeTitle)
             }
             else{
-                RoundedRectangle(cornerRadius: 12)
-                RoundedRectangle(cornerRadius: 12)
-                    .strokeBorder(style: StrokeStyle(lineWidth: 5))
+                shape
             }
+        }
+        .onTapGesture {
+            isFaceUp.toggle() //ViewModifier cannot be mutable, pointers to variables can
         }
     }
 }
