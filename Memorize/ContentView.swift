@@ -82,12 +82,20 @@ struct ContentView: View {
     }
     
     var cards: some View{
+        var randNum : Int
+        if(theme.isEmpty){
+            randNum=0
+        }else{
+            randNum = Int.random(in: 2...theme.count)
+        }
+        
         return LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))]){
-            ForEach(0..<theme.count, id: \.self) { index in
+            ForEach(0..<randNum, id: \.self) { index in
                 CardView(content: theme[index])
                     .aspectRatio(2/3, contentMode: .fit)
             }
         }
+        
     }
         
     
