@@ -17,9 +17,7 @@ struct EmojiMemoryGameView: View {
      let themeFire=["❤️‍🔥","🔥","💥","☄️","🌋","🥵","❤️‍🔥","🔥","💥","☄️","🌋","🥵"]
     
      let themeIce=["💙","❄️","🌨️","🧊","🥶","☃️","💙","❄️","🌨️","🧊","🥶","☃️"]
-    
-    //@State var cardCount = 15
-    
+        
     @State var theme: [String] = []
     
     @State var color: Color = .primary
@@ -29,6 +27,7 @@ struct EmojiMemoryGameView: View {
             title
             ScrollView{
                 cards
+                    .animation(.default, value: viewModel.cards)
             }
             Spacer()
             //cardAdjusters
@@ -88,51 +87,18 @@ struct EmojiMemoryGameView: View {
     }
     
     var cards: some View{
-////        var randNum : Int
-//        if(theme.isEmpty){
-//            randNum=0
-//        }else{
-//            randNum = Int.random(in: 2...theme.count)
-//        }
-        
         return LazyVGrid(columns: [GridItem(.adaptive(minimum: 85),spacing: 0)],spacing: 0){
-            ForEach(viewModel.cards.indices, id: \.self) { index in
-                CardView(viewModel.cards[index])
+            ForEach(viewModel.cards) { card in
+                CardView(card)
                     .aspectRatio(2/3, contentMode: .fit)
                     .padding(4)
+                    .onTapGesture {
+                        viewModel.choose(card)
+                    }
             }
         }
         
     }
-        
-    
-//    var cardAdjusters:some View{
-//        HStack{
-//            cardRemover
-//            Spacer()
-//            cardAdder
-//        }
-//        .padding()
-//        .imageScale(.large)
-//        .font(.largeTitle)
-//    }
-//
-//    func cardCountAdjuster(by offset: Int, symbol: String ) -> some View{
-//        Button(action: {
-//            cardCount += offset
-//        }, label: {
-//            Image(systemName: symbol)
-//        })
-//        .disabled(cardCount + offset < 1 || cardCount + offset > themeCS.count)
-//    }
-//
-//    var cardRemover: some View{
-//        cardCountAdjuster(by: -1, symbol: "rectangle.stack.badge.minus.fill")
-//    }
-//
-//    var cardAdder: some View{
-//        cardCountAdjuster(by: +1, symbol: "rectangle.stack.badge.plus.fill")
-//    }
 }
 
 struct CardView: View{
