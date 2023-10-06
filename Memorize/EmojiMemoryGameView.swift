@@ -11,12 +11,7 @@ import SwiftUI
 
 struct EmojiMemoryGameView: View {
      @ObservedObject var viewModel: EmojiMemoryGame
-            
-     let themeCS:[String] = ["💻","⌚️","📱","🖥️","⌨️","💿","🕹️","📷","⏰","🖱️","💻","⌚️","📱","🖥️","⌨️","💿","🕹️","📷","⏰","🖱️"]
-    
-     let themeFire=["❤️‍🔥","🔥","💥","☄️","🌋","🥵","❤️‍🔥","🔥","💥","☄️","🌋","🥵"]
-    
-     let themeIce=["💙","❄️","🌨️","🧊","🥶","☃️","💙","❄️","🌨️","🧊","🥶","☃️"]
+
         
     @State var theme: [String] = []
     
@@ -31,8 +26,6 @@ struct EmojiMemoryGameView: View {
             }
             Spacer()
             //cardAdjusters
-            themeChooser
-            Spacer()
             Button("Shuffle"){
                 viewModel.shuffle()
             }
@@ -47,28 +40,7 @@ struct EmojiMemoryGameView: View {
             .font(.largeTitle)
             .foregroundColor(.accentColor)
     }
-    
-    var themeChooser: some View{
-        HStack(alignment: VerticalAlignment.center, content: {
-            themeIceButton
-            Spacer()
-            themeCSButton
-            Spacer()
-            themeFireButton
-        })
-    }
 
-    var themeIceButton: some View{
-        themeButtonChooser(chooseTheme: themeIce, symbol: "snowflake", text: "Ice", themeColor: .blue)
-    }
-    
-    var themeFireButton: some View{
-        themeButtonChooser(chooseTheme: themeFire, symbol: "flame.fill", text: "Fire",themeColor: .red )
-    }
-    var themeCSButton: some View{
-        themeButtonChooser(chooseTheme: themeCS, symbol: "laptopcomputer.and.ipad", text: "Computer Science", themeColor: .gray)
-
-    }
     func themeButtonChooser(chooseTheme: [String], symbol: String, text: String, themeColor: Color) -> some View{
         Button {
             theme = chooseTheme.shuffled()
