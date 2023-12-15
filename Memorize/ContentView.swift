@@ -19,7 +19,9 @@ struct ContentView: View {
     //@State var cardCount = 15
     
     @State var theme: [String] = []
-        
+    
+    @State var color: Color = .primary
+    
     var body: some View {
         VStack{
             title
@@ -30,11 +32,11 @@ struct ContentView: View {
             //cardAdjusters
            themeChooser
         }
-        .foregroundColor(.accentColor)
+        .foregroundColor(color)
         .padding()
     }
 
-    
+
     var title: some View{
         Text("Memorize!")
             .font(.largeTitle)
@@ -52,19 +54,20 @@ struct ContentView: View {
     }
 
     var themeIceButton: some View{
-         themeButtonChooser(chooseTheme: themeIce, symbol: "snowflake", text: "Ice")
+        themeButtonChooser(chooseTheme: themeIce, symbol: "snowflake", text: "Ice", themeColor: .blue)
     }
     
     var themeFireButton: some View{
-        themeButtonChooser(chooseTheme: themeFire, symbol: "flame.fill", text: "Fire")
+        themeButtonChooser(chooseTheme: themeFire, symbol: "flame.fill", text: "Fire",themeColor: .red )
     }
     var themeCSButton: some View{
-        themeButtonChooser(chooseTheme: themeCS, symbol: "laptopcomputer.and.ipad", text: "Computer Science")
+        themeButtonChooser(chooseTheme: themeCS, symbol: "laptopcomputer.and.ipad", text: "Computer Science", themeColor: .gray)
 
     }
-    func themeButtonChooser(chooseTheme: [String], symbol: String, text: String) -> some View{
+    func themeButtonChooser(chooseTheme: [String], symbol: String, text: String, themeColor: Color) -> some View{
         Button {
             theme = chooseTheme.shuffled()
+            color = themeColor
         } label: {
             VStack(alignment: HorizontalAlignment.center){
                 Image(systemName: symbol)
@@ -74,6 +77,7 @@ struct ContentView: View {
                     .font(.caption)
             }
         }
+        .foregroundColor(themeColor)
         
     }
     
@@ -81,7 +85,7 @@ struct ContentView: View {
         return LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))]){
             ForEach(0..<theme.count, id: \.self) { index in
                 CardView(content: theme[index])
-                    .aspectRatio(1/1.5, contentMode: .fit)
+                    .aspectRatio(2/3, contentMode: .fit)
             }
         }
     }
