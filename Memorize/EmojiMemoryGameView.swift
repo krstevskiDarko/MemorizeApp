@@ -10,52 +10,37 @@ import SwiftUI
 
 
 struct EmojiMemoryGameView: View {
-     @ObservedObject var viewModel: EmojiMemoryGame
-
-        
-    @State var theme: [String] = []
-    
-    @State var color: Color = .primary
+    @ObservedObject var viewModel: EmojiMemoryGame
     
     var body: some View {
         VStack{
-            title
+            HStack{
+                title
+                Spacer()
+                Text("Score: \(viewModel.score)")
+                    .font(.largeTitle)
+            }
             ScrollView{
                 cards
                     .animation(.default, value: viewModel.cards)
             }
             Spacer()
-            //cardAdjusters
-            Button("Shuffle"){
+            Button("New Game"){
+                viewModel.newGame()
                 viewModel.shuffle()
             }
+            .font(.largeTitle)
+            .foregroundColor(.black)
         }
-        .foregroundColor(color)
+        .foregroundColor(viewModel.color)
         .padding()
     }
 
 
     var title: some View{
-        Text("Memorize!")
+        Text(viewModel.theme.name)
             .font(.largeTitle)
-            .foregroundColor(.accentColor)
-    }
-
-    func themeButtonChooser(chooseTheme: [String], symbol: String, text: String, themeColor: Color) -> some View{
-        Button {
-            theme = chooseTheme.shuffled()
-            color = themeColor
-        } label: {
-            VStack(alignment: HorizontalAlignment.center){
-                Image(systemName: symbol)
-                    .imageScale(.large)
-                    .font(.largeTitle)
-                Text(text)
-                    .font(.caption)
-            }
-        }
-        .foregroundColor(themeColor)
-        
+            .foregroundColor(viewModel.color)
     }
     
     var cards: some View{

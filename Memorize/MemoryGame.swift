@@ -7,8 +7,11 @@
 
 import Foundation
 
-struct MemoryGame<CardContent> where CardContent: Equatable {
+struct MemoryGame<CardContent> where CardContent: Equatable & Hashable {
     private(set) var cards: Array<Card>
+    private(set) var score: Int
+    private var seenCards: Set<Card>
+    
     
     init(numberOfPairOfCards: Int, cardContentFactory: (Int) -> CardContent){
         cards = []
@@ -17,9 +20,11 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         for pairIndex in 0..<max(2,numberOfPairOfCards){
             
             let content = cardContentFactory(pairIndex)
-            cards.append(Card(content: content, id: "\(pairIndex+1)a"))
-            cards.append(Card(content: content, id: "\(pairIndex+1)b"))
+            cards.append(Card(content: content, id: "\(pairIndex)a"))
+            cards.append(Card(content: content, id: "\(pairIndex)b"))
         }
+        score = 0
+        seenCards = []
     }
     
     mutating func choose(_  card: Card){
@@ -29,36 +34,62 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                     if cards[chosenIndex].content == cards[potentionalMatchIndex].content{
                         cards[chosenIndex].isMatched = true
                         cards[potentionalMatchIndex].isMatched = true
+                        
+                        score += 2
+                    }
+                    else{
+                        if seenCards.contains(cards[chosenIndex]) {
+                            score -= 1
+                        }
+                        seenCards.insert(cards[chosenIndex])
+                        seenCards.insert(cards[potentionalMatchIndex])
                     }
                 } else {
                     indexOfTheOneAndOnlyFaceUpCard = chosenIndex
                 }
                 cards[chosenIndex].isFaceUp = true
+                print(seenCards)
             }
-            
         }
     }
     
-    var indexOfTheOneAndOnlyFaceUpCard: Int? {
+    private var indexOfTheOneAndOnlyFaceUpCard: Int? {
         get { cards.indices.filter { index in cards[index].isFaceUp}.only }
         set { cards.indices.forEach { cards[$0].isFaceUp = (newValue == $0) } }
     }
     
     mutating func shuffle(){
         cards.shuffle()
-        print(cards)
     }
-
-    struct Card: Equatable, Identifiable, CustomDebugStringConvertible{
-  
+    
+    
+    
+    
+    
+    
+    
+    
+    struct Card: Equatable, Identifiable, CustomDebugStringConvertible, Hashable{
+        
+        
         var isFaceUp = false
         var isMatched = false
         let content: CardContent
         
+        
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(id)
+            hasher.combine(content)
+            hasher.combine(isMatched)
+            hasher.combine(isFaceUp)
+            hasher.combine(debugDescription)
+        }
+        
+        
         var id: String
         //GoodForDebugging
         var debugDescription: String{
-             "\(id): \(content)"
+            "\(id): \(content)"
         }
         
     }
@@ -66,6 +97,6 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
 
 extension Array {
     var only: Element? {
-         count == 1 ? first : nil
+        count == 1 ? first : nil
     }
 }
