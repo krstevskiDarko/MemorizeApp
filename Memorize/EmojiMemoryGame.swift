@@ -10,7 +10,8 @@ import SwiftUI
 
 
 class EmojiMemoryGame: ObservableObject {
-    
+    typealias Card = MemoryGame<String>.Card
+
     //Making emojis variable GLOBAL (with keyword 'static') to make sure its initilized before the other propertiy initilizers in the class
     private static let emojis = ["💻","⌚️","📱","🖥️","⌨️","💿","🕹️","📷","⏰","🖱️",]
     
@@ -27,7 +28,9 @@ class EmojiMemoryGame: ObservableObject {
     
     @Published private var model = createMemoryGame()
     
-    var cards: Array<MemoryGame<String>.Card>{
+    var color: Color {return .orange}
+    
+    var cards: Array<Card>{
         return model.cards
     }
     
@@ -36,7 +39,7 @@ class EmojiMemoryGame: ObservableObject {
         model.shuffle()
     }
     
-    func choose(_ card: MemoryGame<String>.Card){
+    func choose(_ card: Card){
         model.choose(card)
     }
     
