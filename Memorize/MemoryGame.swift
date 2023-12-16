@@ -10,7 +10,7 @@ import Foundation
 struct MemoryGame<CardContent> where CardContent: Equatable & Hashable {
     private(set) var cards: Array<Card>
     private(set) var score: Int
-    private var seenCards: Set<Card>
+    private var seenCards: Set<String>
     
     
     init(numberOfPairOfCards: Int, cardContentFactory: (Int) -> CardContent){
@@ -20,8 +20,8 @@ struct MemoryGame<CardContent> where CardContent: Equatable & Hashable {
         for pairIndex in 0..<max(2,numberOfPairOfCards){
             
             let content = cardContentFactory(pairIndex)
-            cards.append(Card(content: content, id: "\(pairIndex)a"))
-            cards.append(Card(content: content, id: "\(pairIndex)b"))
+            cards.append(Card(content: content, id: "\(pairIndex+1)a"))
+            cards.append(Card(content: content, id: "\(pairIndex+1)b"))
         }
         score = 0
         seenCards = []
@@ -38,11 +38,12 @@ struct MemoryGame<CardContent> where CardContent: Equatable & Hashable {
                         score += 2
                     }
                     else{
-                        if seenCards.contains(cards[chosenIndex]) {
+                        if (seenCards.contains(cards[chosenIndex].id )
+                            || seenCards.contains(cards[potentionalMatchIndex].id)) {
                             score -= 1
                         }
-                        seenCards.insert(cards[chosenIndex])
-                        seenCards.insert(cards[potentionalMatchIndex])
+                        seenCards.insert(cards[chosenIndex].id)
+                        seenCards.insert(cards[potentionalMatchIndex].id)
                     }
                 } else {
                     indexOfTheOneAndOnlyFaceUpCard = chosenIndex
@@ -69,23 +70,14 @@ struct MemoryGame<CardContent> where CardContent: Equatable & Hashable {
     
     
     
-    struct Card: Equatable, Identifiable, CustomDebugStringConvertible, Hashable{
+    struct Card: Equatable, Identifiable, CustomDebugStringConvertible{
         
         
         var isFaceUp = false
         var isMatched = false
         let content: CardContent
         
-        
-        func hash(into hasher: inout Hasher) {
-            hasher.combine(id)
-            hasher.combine(content)
-            hasher.combine(isMatched)
-            hasher.combine(isFaceUp)
-            hasher.combine(debugDescription)
-        }
-        
-        
+                
         var id: String
         //GoodForDebugging
         var debugDescription: String{
