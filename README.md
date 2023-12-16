@@ -25,7 +25,8 @@ To get started with the "Memorize" app, follow these steps:
    git clone https://github.com/your-username/memorize-swiftui.git
 Open the project in Xcode.
 Build and run the app on the iOS Simulator or a physical iOS device.
-How to Play
+
+### How to Play
 
 Launch the "Memorize" app.
 Tap on cards to flip them over and reveal their symbols.
